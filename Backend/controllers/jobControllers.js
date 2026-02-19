@@ -28,7 +28,10 @@ const matchSkills = async (req, res) => {
   try {
     const { role, userSkills } = req.body;
 
-    const job = await JobRole.findOne({ title: role });
+    const job = await JobRole.findOne({
+      title: { $regex: new RegExp(`^${role}$`, "i") },
+    });
+
 
     if (!job) {
       return res.status(404).json({ message: "Job role not found" });
