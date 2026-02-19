@@ -54,7 +54,7 @@
     .nav-links a.active { color: rgba(255,255,255,0.8); }
     .nav-cta {
       font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      background: var(--red); color: #000; text-decoration: none;
+      background: var#000; color: #000; text-decoration: none;
       padding: 9px 22px; font-weight: 500;
       transition: all 0.15s;
     }
@@ -232,7 +232,6 @@
       <a href="#hero" class="active" data-section="hero">Home</a>
       <a href="#how" data-section="how">How It Works</a>
       <a href="#roles" data-section="roles">Roles</a>
-      <a href="#testimonials" data-section="testimonials">Stories</a>
       <a href="skill-input.html" class="nav-cta">Get Started</a>
     </div>
     <div class="hamburger" id="hamburger">
@@ -243,7 +242,6 @@
     <a href="#hero">Home</a>
     <a href="#how">How It Works</a>
     <a href="#roles">Roles</a>
-    <a href="#testimonials">Stories</a>
     <a href="skill-input.html" style="color:var(--red);">→ Get Started</a>
   </div>
 </nav>
@@ -388,37 +386,6 @@
   <div class="reveal" style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:8px;" id="tagRow"></div>
 </section>
 
-<!-- ════════════════════════════════════════════
-     SECTION 4 — TESTIMONIALS
-════════════════════════════════════════════ -->
-<div style="border-top:1px solid rgba(255,255,255,0.05);position:relative;z-index:1;"></div>
-<section id="testimonials" style="padding:120px 2rem;">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div class="section-eyebrow reveal">Social Proof</div>
-    <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;margin-bottom:1.5rem;">REAL STORIES</h2>
-    <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:48ch;margin-bottom:4rem;">
-      From career switchers to senior engineers — here's what people found when they ran the analysis.
-    </p>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:rgba(255,255,255,0.05);margin-bottom:3rem;">
-      <div class="testi-card reveal reveal-delay-1" style="background:#000;">
-        <div class="testi-quote">I knew something was off with my job applications. Turned out I was missing Docker and system design. Fixed that in 6 weeks. Got the offer.</div>
-        <div class="testi-name">Arjun S.</div>
-        <div class="testi-role">Now: Backend Developer @ Fintech Startup</div>
-      </div>
-      <div class="testi-card reveal reveal-delay-2" style="background:#000;">
-        <div class="testi-quote">The match score hit me hard — 44%. Three months later I was at 81%. This tool gave me a clear target when everything felt scattered.</div>
-        <div class="testi-name">Priya M.</div>
-        <div class="testi-role">Now: Data Scientist @ Analytics Firm</div>
-      </div>
-      <div class="testi-card reveal reveal-delay-3" style="background:#000;">
-        <div class="testi-quote">Switching from design to frontend dev felt impossible until I saw exactly what was missing. TypeScript, testing — two things. Two months. Done.</div>
-        <div class="testi-name">Rohan K.</div>
-        <div class="testi-role">Now: Frontend Developer @ Product Agency</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ════════════════════════════════════════════
      CTA BAND
@@ -455,7 +422,6 @@
             <a href="#hero">Home</a>
             <a href="#how">How It Works</a>
             <a href="#roles">Roles</a>
-            <a href="#testimonials">Stories</a>
           </div>
         </div>
         <div>
@@ -513,7 +479,7 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
 // ── ACTIVE NAV LINKS ──
-const sections = ['hero','how','roles','testimonials'];
+const sections = ['hero','how','roles'];
 const navLinks = document.querySelectorAll('.nav-links a[data-section]');
 
 const sectionObserver = new IntersectionObserver((entries) => {
