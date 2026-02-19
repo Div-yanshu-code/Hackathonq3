@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkillGap — Enter Skills</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --red: #FF0000; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#000; color:#fff; font-family:'IBM Plex Mono',monospace; min-height:100vh; }
+
+    .field-label { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:#555; margin-bottom:0.5rem; display:block; }
+
+    textarea, select {
+      width:100%; background:#000; color:#fff;
+      border:1px solid var(--red); padding:1rem;
+      font-family:'IBM Plex Mono',monospace; font-size:0.85rem;
+      outline:none; resize:none; appearance:none;
+      transition:box-shadow 0.2s, border-color 0.2s;
+    }
+    textarea:focus, select:focus { box-shadow:0 0 0 1px var(--red); border-color:var(--red); }
+    select { background:#000; cursor:pointer; }
+    select option { background:#000; }
+
+    .submit-btn {
+      width:100%; background:var(--red); color:#fff;
+      font-family:'IBM Plex Mono',monospace; font-size:0.8rem;
+      letter-spacing:0.25em; text-transform:uppercase;
+      border:none; cursor:pointer; padding:1.1rem;
+      position:relative; transition:background 0.15s, box-shadow 0.2s;
+    }
+    .submit-btn:hover { background:#cc0000; box-shadow:0 0 20px rgba(255,0,0,0.3); }
+    .submit-btn:active { transform:translateY(1px); }
+
+    .divider { border:none; border-top:1px solid #111; margin:2rem 0; }
+
+    .fade-in { animation:fadeUp 0.6s ease both; }
+    .fade-in-2 { animation:fadeUp 0.6s 0.1s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    .progress-bar { height:1px; background:#111; width:100%; }
+    .progress-fill { height:1px; background:var(--red); width:50%; }
+
+    .tag-hint { font-size:0.65rem; color:#333; letter-spacing:0.1em; margin-top:0.5rem; }
+  </style>
+</head>
+<body>
+
+  <nav style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;border-bottom:1px solid #111;">
+    <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.1em;text-decoration:none;color:#fff;">
+      SKILL<span style="color:var(--red)">GAP</span>
+    </a>
+    <span style="font-size:0.6rem;letter-spacing:0.2em;color:#333;text-transform:uppercase;">Step 1 of 2</span>
+  </nav>
+
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+
+  <main style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 57px);padding:3rem 1.5rem;">
+    <div style="width:100%;max-width:540px;">
+
+      <div class="fade-in" style="margin-bottom:3rem;">
+        <p style="font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--red);margin-bottom:0.75rem;">▸ Skill Profiling</p>
+        <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,4.5rem);line-height:0.95;margin-bottom:1rem;">
+          WHAT CAN<br>YOU <span style="color:var(--red)">DO?</span>
+        </h1>
+        <p style="font-size:0.78rem;color:#444;line-height:1.8;">Tell us your current skills and target role.<br>We'll show you the gap instantly.</p>
+      </div>
+
+      <form class="fade-in-2" id="skillForm" style="display:flex;flex-direction:column;gap:1.75rem;">
+
+        <div>
+          <label class="field-label" for="skills">Your Current Skills</label>
+          <textarea id="skills" name="skills" rows="5"
+            placeholder="e.g. Python, React, SQL, Git, REST APIs, JavaScript..."></textarea>
+          <p class="tag-hint">Separate each skill with a comma</p>
+        </div>
+
+        <div>
+          <label class="field-label" for="role">Target Career Role</label>
+          <select id="role" name="role">
+            <option value="" disabled selected>— Select a role —</option>
+            <option value="Data Scientist">Data Scientist</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Backend Developer">Backend Developer</option>
+          </select>
+        </div>
+
+        <hr class="divider">
+
+        <button type="submit" class="submit-btn">Run Analysis →</button>
+
+        <p style="font-size:0.6rem;color:#333;text-align:center;letter-spacing:0.1em;">
+          No account required &nbsp;·&nbsp; No data stored on servers
+        </p>
+      </form>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('skillForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const skills = document.getElementById('skills').value.trim();
+      const role   = document.getElementById('role').value;
+
+      if (!skills) { alert('Please enter at least one skill.'); return; }
+      if (!role)   { alert('Please select a target role.'); return; }
+
+      localStorage.setItem('sg_skills', skills);
+      localStorage.setItem('sg_role',   role);
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

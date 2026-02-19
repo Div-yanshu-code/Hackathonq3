@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkillBridge — Bridge the Skill Gap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --red: #FF0000; --red-dim: rgba(255,0,0,0.15); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #000; color: #fff; font-family: 'DM Mono', monospace; overflow-x: hidden; }
+    .display { font-family: 'Bebas Neue', sans-serif; }
+
+    /* ── GRID BACKGROUND ── */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,0,0,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,0,0,0.035) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── NAVBAR ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background 0.3s;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.1em; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.45); text-decoration: none;
+      transition: color 0.15s; padding: 4px 0;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--red);
+      transition: width 0.2s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a.active { color: rgba(255,255,255,0.8); }
+    .nav-cta {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      background: var(--red); color: #000; text-decoration: none;
+      padding: 9px 22px; font-weight: 500;
+      transition: all 0.15s;
+    }
+    .nav-cta:hover { background: #000; color: var(--red); outline: 1px solid var(--red); }
+
+    /* Mobile nav toggle */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: #fff; transition: all 0.3s; display: block; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      background: #000;
+    }
+    .mobile-menu a {
+      font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); text-decoration: none; padding: 16px 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.15s;
+    }
+    .mobile-menu a:hover { color: var(--red); }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .mobile-menu.open { display: flex; }
+    }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 64px 2rem 0; max-width: 1200px; margin: 0 auto;
+    }
+
+    /* Ticker */
+    .ticker-wrap { overflow: hidden; border-top: 1px solid rgba(255,0,0,0.15); border-bottom: 1px solid rgba(255,0,0,0.15); }
+    .ticker-track { display: flex; gap: 64px; white-space: nowrap; animation: tickerRoll 28s linear infinite; padding: 10px 0; }
+    .ticker-item { font-size: 10px; letter-spacing: 0.2em; color: rgba(255,0,0,0.5); text-transform: uppercase; flex-shrink: 0; }
+    @keyframes tickerRoll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Hero heading */
+    .hero-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 160px);
+      line-height: 0.91;
+      letter-spacing: 0.01em;
+    }
+    .cursor-red::after { content: '|'; color: var(--red); animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Buttons */
+    .btn-red {
+      display: inline-block; background: var(--red); color: #000;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 15px 44px; text-decoration: none;
+      position: relative; transition: all 0.15s; border: none; cursor: pointer;
+    }
+    .btn-red::after { content:''; position:absolute; inset:0; border:1px solid var(--red); transform:translate(5px,5px); transition:all 0.15s; }
+    .btn-red:hover { background: #000; color: var(--red); }
+    .btn-red:hover::after { transform: translate(2px,2px); }
+    .btn-outline {
+      display: inline-block; background: transparent; color: rgba(255,255,255,0.6);
+      font-family: 'DM Mono', monospace; font-size: 12px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 14px 44px; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.15); transition: all 0.15s;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+    /* Stats */
+    .stat-item { border-left: 2px solid var(--red); padding-left: 18px; }
+
+    /* ── HOW IT WORKS ── */
+    #how { padding: 120px 2rem; max-width: 1200px; margin: 0 auto; }
+    .section-eyebrow { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+    .section-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--red); display: inline-block; }
+    .step-card {
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 32px 28px; position: relative;
+      transition: border-color 0.2s;
+    }
+    .step-card:hover { border-color: rgba(255,0,0,0.3); }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 72px; line-height: 1; color: rgba(255,0,0,0.12); position: absolute; top: 16px; right: 20px; }
+    .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.05em; margin-bottom: 12px; }
+    .step-desc { font-size: 12px; line-height: 2; color: rgba(255,255,255,0.45); }
+
+    /* ── ROLES ── */
+    #roles { padding: 0 2rem 120px; max-width: 1200px; margin: 0 auto; }
+    .role-card {
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 36px 32px; cursor: pointer;
+      transition: all 0.2s; position: relative; overflow: hidden;
+    }
+    .role-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--red); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .role-card:hover { border-color: rgba(255,0,0,0.25); background: rgba(255,0,0,0.03); }
+    .role-card:hover::before { transform: scaleX(1); }
+    .role-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .role-skills { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; line-height: 1.8; }
+    .role-arrow { font-size: 20px; color: var(--red); position: absolute; top: 32px; right: 28px; opacity: 0; transition: all 0.2s; transform: translateX(-8px); }
+    .role-card:hover .role-arrow { opacity: 1; transform: translateX(0); }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { padding: 0 2rem 120px; max-width: 1200px; margin: 0 auto; }
+    .testi-card {
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 36px 32px;
+    }
+    .testi-quote { font-size: 13px; line-height: 2.1; color: rgba(255,255,255,0.7); margin-bottom: 24px; font-style: italic; }
+    .testi-quote::before { content: '"'; color: var(--red); font-size: 32px; font-family: 'Bebas Neue', sans-serif; display: block; margin-bottom: 8px; line-height: 1; }
+    .testi-name { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .testi-role { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,0,0,0.6); margin-top: 4px; }
+
+    /* ── CTA BAND ── */
+    #cta-band {
+      background: var(--red); padding: 80px 2rem;
+      position: relative; z-index: 1; overflow: hidden;
+    }
+    #cta-band::before {
+      content: 'ANALYZE'; font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 20vw, 200px); color: rgba(0,0,0,0.12);
+      position: absolute; right: -0.02em; top: 50%; transform: translateY(-50%);
+      pointer-events: none; line-height: 1;
+    }
+    .cta-band-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .btn-black { display: inline-block; background: #000; color: #fff; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 15px 44px; text-decoration: none; position: relative; transition: all 0.15s; }
+    .btn-black::after { content:''; position:absolute; inset:0; border:1px solid #000; transform:translate(5px,5px); transition:all 0.15s; }
+    .btn-black:hover { background: #fff; color: #000; }
+    .btn-black:hover::after { transform: translate(2px,2px); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 48px 2rem 32px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-links a { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--red); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ── HERO ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .hero-a1 { animation: fadeUp 0.7s 0.1s ease both; }
+    .hero-a2 { animation: fadeUp 0.7s 0.2s ease both; }
+    .hero-a3 { animation: fadeUp 0.7s 0.35s ease both; }
+    .hero-a4 { animation: fadeUp 0.7s 0.5s ease both; }
+    .hero-a5 { animation: fadeUp 0.7s 0.65s ease both; }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- ════════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo" style="text-decoration:none;">
+      SKILL<span style="color:var(--red)">BRIDGE</span>
+    </a>
+    <div class="nav-links">
+      <a href="#hero" class="active" data-section="hero">Home</a>
+      <a href="#how" data-section="how">How It Works</a>
+      <a href="#roles" data-section="roles">Roles</a>
+      <a href="#testimonials" data-section="testimonials">Stories</a>
+      <a href="skill-input.html" class="nav-cta">Get Started</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero">Home</a>
+    <a href="#how">How It Works</a>
+    <a href="#roles">Roles</a>
+    <a href="#testimonials">Stories</a>
+    <a href="skill-input.html" style="color:var(--red);">→ Get Started</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     SECTION 1 — HERO
+════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="ticker-wrap" style="position:relative;z-index:1;">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;padding: 7vh 0 4rem;">
+    <!-- Eyebrow -->
+    <div class="hero-a1" style="margin-bottom:1.5rem;">
+      <span style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--red);border:1px solid rgba(255,0,0,0.3);padding:6px 14px;">
+        ▸ Real-time Industry Intelligence
+      </span>
+    </div>
+
+    <!-- Heading -->
+    <h1 class="hero-heading hero-a2" style="margin-bottom: 1.5rem;">
+      BRIDGE<br/>
+      <span style="color:var(--red)">THE SKILL</span><br/>
+      GAP<span class="cursor-red"></span>
+    </h1>
+
+    <!-- Sub -->
+    <p class="hero-a3" style="font-size:13px;line-height:2.1;color:rgba(255,255,255,0.45);max-width:40ch;margin-bottom:2.5rem;">
+      AI-powered analysis that maps your current skills against what the industry actually needs. No fluff. Just gaps and paths to close them.
+    </p>
+
+    <!-- Buttons -->
+    <div class="hero-a4" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:5rem;">
+      <a href="skill-input.html" class="btn-red">Analyze My Skills</a>
+      <a href="#how" class="btn-outline">See How It Works</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-a5" style="display:flex;gap:3rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.06);padding-top:2.5rem;">
+      <div class="stat-item">
+        <div class="display" style="font-size:2.5rem;">500+</div>
+        <div style="font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:4px;">Skills Tracked</div>
+      </div>
+      <div class="stat-item">
+        <div class="display" style="font-size:2.5rem;">3</div>
+        <div style="font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:4px;">Career Paths</div>
+      </div>
+      <div class="stat-item">
+        <div class="display" style="font-size:2.5rem;color:var(--red)">92%</div>
+        <div style="font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:4px;">Match Accuracy</div>
+      </div>
+      <div class="stat-item">
+        <div class="display" style="font-size:2.5rem;">&lt;2s</div>
+        <div style="font-size:10px;letter-spacing:0.2em;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:4px;">Analysis Time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div style="text-align:center;padding-bottom:3rem;position:relative;z-index:1;">
+    <a href="#how" style="display:inline-flex;flex-direction:column;align-items:center;gap:8px;text-decoration:none;color:rgba(255,255,255,0.2);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;">
+      <span>Scroll</span>
+      <span style="animation:bounce 2s ease infinite;">↓</span>
+    </a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 2 — HOW IT WORKS
+════════════════════════════════════════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.05);position:relative;z-index:1;"></div>
+<section id="how">
+  <div class="section-eyebrow reveal">Process</div>
+  <div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:3rem;">
+    <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;">HOW IT WORKS</h2>
+  </div>
+  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:48ch;margin-bottom:4rem;">
+    Three steps. No sign-up required. Go from uncertainty to clarity in under two minutes.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:rgba(255,255,255,0.05);">
+    <div class="step-card reveal reveal-delay-1" style="background:#000;">
+      <div class="step-num">01</div>
+      <div class="step-title">Enter Your Skills</div>
+      <p class="step-desc">List everything you know — programming languages, frameworks, tools, methodologies. Be honest, be thorough. Comma-separated, no formatting needed.</p>
+    </div>
+    <div class="step-card reveal reveal-delay-2" style="background:#000;">
+      <div class="step-num">02</div>
+      <div class="step-title">Pick a Target Role</div>
+      <p class="step-desc">Choose the career path you're aiming for. We've mapped out every skill required by top companies hiring for each role in today's market.</p>
+    </div>
+    <div class="step-card reveal reveal-delay-3" style="background:#000;">
+      <div class="step-num">03</div>
+      <div class="step-title">Get Your Gap Report</div>
+      <p class="step-desc">Instantly see your match score, which critical skills you're missing, and what to learn next. Your personalized roadmap, generated in seconds.</p>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top:3rem;display:flex;justify-content:center;">
+    <a href="skill-input.html" class="btn-red">Start Your Analysis →</a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 3 — ROLES
+════════════════════════════════════════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.05);position:relative;z-index:1;"></div>
+<section id="roles">
+  <div class="section-eyebrow reveal" style="margin-top:0;padding-top:120px;">Supported Paths</div>
+  <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;margin-bottom:1.5rem;">CAREER ROLES</h2>
+  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:52ch;margin-bottom:4rem;">
+    We've reverse-engineered what top companies actually look for. Pick your role and see where you stand.
+  </p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:rgba(255,255,255,0.05);">
+    <div class="role-card reveal reveal-delay-1" style="background:#000;" onclick="window.location='skill-input.html'">
+      <div class="role-arrow">→</div>
+      <div class="role-name">Data Scientist</div>
+      <div class="role-skills">Python · SQL · Machine Learning<br/>TensorFlow · Spark · Statistics<br/>Data Visualization · Docker</div>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,0,0,0.5);">Avg. match gap: 38%</div>
+    </div>
+    <div class="role-card reveal reveal-delay-2" style="background:#000;" onclick="window.location='skill-input.html'">
+      <div class="role-arrow">→</div>
+      <div class="role-name">Frontend Developer</div>
+      <div class="role-skills">React · TypeScript · CSS Architecture<br/>Testing · Performance · Accessibility<br/>Web APIs · GraphQL</div>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,0,0,0.5);">Avg. match gap: 26%</div>
+    </div>
+    <div class="role-card reveal reveal-delay-3" style="background:#000;" onclick="window.location='skill-input.html'">
+      <div class="role-arrow">→</div>
+      <div class="role-name">Backend Developer</div>
+      <div class="role-skills">Node.js · Databases · Kubernetes<br/>Redis · Microservices · gRPC<br/>System Design · API Security</div>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,0,0,0.5);">Avg. match gap: 42%</div>
+    </div>
+  </div>
+
+  <!-- Industry tags -->
+  <div class="reveal" style="margin-top:3rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+    <span style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-right:8px;">Industries covered:</span>
+    <span style="display:none" id="tags"></span>
+  </div>
+  <div class="reveal" style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:8px;" id="tagRow"></div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     SECTION 4 — TESTIMONIALS
+════════════════════════════════════════════ -->
+<div style="border-top:1px solid rgba(255,255,255,0.05);position:relative;z-index:1;"></div>
+<section id="testimonials" style="padding:120px 2rem;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-eyebrow reveal">Social Proof</div>
+    <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;margin-bottom:1.5rem;">REAL STORIES</h2>
+    <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:48ch;margin-bottom:4rem;">
+      From career switchers to senior engineers — here's what people found when they ran the analysis.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:rgba(255,255,255,0.05);margin-bottom:3rem;">
+      <div class="testi-card reveal reveal-delay-1" style="background:#000;">
+        <div class="testi-quote">I knew something was off with my job applications. Turned out I was missing Docker and system design. Fixed that in 6 weeks. Got the offer.</div>
+        <div class="testi-name">Arjun S.</div>
+        <div class="testi-role">Now: Backend Developer @ Fintech Startup</div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2" style="background:#000;">
+        <div class="testi-quote">The match score hit me hard — 44%. Three months later I was at 81%. This tool gave me a clear target when everything felt scattered.</div>
+        <div class="testi-name">Priya M.</div>
+        <div class="testi-role">Now: Data Scientist @ Analytics Firm</div>
+      </div>
+      <div class="testi-card reveal reveal-delay-3" style="background:#000;">
+        <div class="testi-quote">Switching from design to frontend dev felt impossible until I saw exactly what was missing. TypeScript, testing — two things. Two months. Done.</div>
+        <div class="testi-name">Rohan K.</div>
+        <div class="testi-role">Now: Frontend Developer @ Product Agency</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     CTA BAND
+════════════════════════════════════════════ -->
+<div id="cta-band">
+  <div class="cta-band-inner">
+    <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(0,0,0,0.5);margin-bottom:1rem;">Ready?</p>
+    <h2 class="display" style="font-size:clamp(48px,8vw,96px);color:#000;line-height:0.95;margin-bottom:2rem;">
+      KNOW YOUR GAP.<br/>CLOSE IT FAST.
+    </h2>
+    <a href="skill-input.html" class="btn-black">Analyze My Skills Now →</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2rem;margin-bottom:3rem;">
+      <div>
+        <div class="display" style="font-size:1.8rem;letter-spacing:0.1em;margin-bottom:10px;">
+          SKILL<span style="color:var(--red)">BRIDGE</span>
+        </div>
+        <p style="font-size:11px;color:rgba(255,255,255,0.25);max-width:32ch;line-height:1.9;letter-spacing:0.05em;">
+          AI-powered skill gap analysis for developers and data professionals.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:4rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;">Navigate</div>
+          <div class="footer-links" style="display:flex;flex-direction:column;gap:10px;">
+            <a href="#hero">Home</a>
+            <a href="#how">How It Works</a>
+            <a href="#roles">Roles</a>
+            <a href="#testimonials">Stories</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;">Analyze</div>
+          <div class="footer-links" style="display:flex;flex-direction:column;gap:10px;">
+            <a href="skill-input.html">Start Analysis</a>
+            <a href="dashboard.html">View Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
+      <p style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.12em;">
+        &copy; 2025 SkillBridge. All rights reserved.
+      </p>
+      <p style="font-size:10px;color:rgba(255,255,255,0.15);letter-spacing:0.1em;text-transform:uppercase;">
+        Built for developers · No backend · Local only
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+</style>
+
+<script>
+// ── TICKER ──
+const skills = ['Docker','Machine Learning','SQL','Python','React','Kubernetes','Data Science','TypeScript','FastAPI','Spark','TensorFlow','AWS','Redis','GraphQL','Rust','Node.js','Git','CI/CD'];
+const ticker = document.getElementById('ticker');
+const all = [...skills,...skills,...skills,...skills];
+ticker.innerHTML = all.map(s => `<span class="ticker-item">— ${s}</span>`).join('');
+
+// ── INDUSTRY TAGS ──
+const industries = ['FAANG','FinTech','HealthTech','SaaS','AI/ML Startups','E-commerce','Gaming','Cybersecurity'];
+const tagRow = document.getElementById('tagRow');
+industries.forEach(t => {
+  const el = document.createElement('span');
+  el.style.cssText = 'font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08);padding:5px 12px;';
+  el.textContent = t;
+  tagRow.appendChild(el);
+});
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ── ACTIVE NAV LINKS ──
+const sections = ['hero','how','roles','testimonials'];
+const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.dataset.section === entry.target.id);
+      });
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) sectionObserver.observe(el);
+});
+
+// ── HAMBURGER ──
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+// Close on link click
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
