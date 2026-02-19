@@ -3,236 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Skill Bridge — Dashboard</title>
+  <title>SkillBridge — Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root { --red: #FF0000; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:#fff; font-family:'IBM Plex Mono',monospace; min-height:100vh; }
-
+    body { background:#000; color:#fff; font-family:'IBM Plex Mono',monospace; }
     .section-label { font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:0.75rem; }
     .section-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; margin-bottom:1.5rem; }
-
-    .score-ring-wrap { position:relative; display:inline-flex; flex-direction:column; align-items:center; }
-    .score-num {
-      font-family:'Bebas Neue',sans-serif;
-      font-size:clamp(5rem,15vw,10rem);
-      line-height:1;
-      color:var(--red);
-    }
-    .score-label { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:#444; margin-top:0.25rem; }
-
-    .pill {
-      display:inline-block; border:1px solid; padding:0.35rem 0.85rem;
-      font-size:0.75rem; letter-spacing:0.1em; margin:0.25rem;
-    }
+    .pill { display:inline-block; border:1px solid; padding:0.35rem 0.85rem; font-size:0.75rem; margin:0.25rem; }
     .pill-missing { border-color:var(--red); color:var(--red); }
     .pill-rec { border-color:#444; color:#888; }
-
-    .divider { border:none; border-top:1px solid #111; margin:2.5rem 0; }
-
-    .chart-wrap { background:#050505; border:1px solid #111; padding:1.5rem; }
-
-    .fade-in { animation:fadeUp 0.6s ease both; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-    .meta-row { display:flex; gap:2rem; font-size:0.75rem; color:#444; flex-wrap:wrap; margin-top:0.5rem; }
-    .meta-row span { letter-spacing:0.1em; }
-
-    .redo-btn {
-      display:inline-block; border:1px solid var(--red); color:var(--red);
-      font-family:'IBM Plex Mono',monospace; font-size:0.72rem;
-      letter-spacing:0.2em; text-transform:uppercase;
-      padding:0.7rem 2rem; text-decoration:none;
-      transition:background 0.15s, color 0.15s;
-    }
-    .redo-btn:hover { background:var(--red); color:#000; }
-
-    .count-badge { font-size:0.65rem; color:#333; margin-left:0.5rem; }
   </style>
 </head>
+
 <body>
 
-  <nav style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;border-bottom:1px solid #111;">
-    <a href="index.html" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.1em;text-decoration:none;color:#fff;">
-      SKILL<span style="color:var(--red)">Bridge</span>
-    </a>
-    <a href="skill-input.html" class="redo-btn">Re-analyze</a>
-  </nav>
+<nav style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;border-bottom:1px solid #111;">
+  <a href="index1.html" style="font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:0.1em;text-decoration:none;color:#fff;">
+    SKILL<span style="color:var(--red)">BRIDGE</span>
+  </a>
+  <a href="skill-input.html" style="border:1px solid var(--red);color:var(--red);padding:0.6rem 1.5rem;text-decoration:none;">Re-analyze</a>
+</nav>
 
-  <main style="max-width:1100px;margin:0 auto;padding:3rem 1.5rem 6rem;">
+<main style="max-width:1100px;margin:0 auto;padding:3rem 1.5rem 6rem;">
 
-    <!-- Header -->
-    <div class="fade-in" style="margin-bottom:3rem;">
-      <p class="section-label">▸ Analysis Complete</p>
-      <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.5rem);line-height:0.95;">
-        YOUR SKILL REPORT
-      </h1>
-      <div class="meta-row">
-        <span>ROLE: <span id="roleDisplay" style="color:#fff;">—</span></span>
-        <span>SKILLS ENTERED: <span id="skillCount" style="color:#fff;">—</span></span>
-      </div>
-    </div>
+  <p class="section-label">▸ Analysis Complete</p>
+  <h1 style="font-family:'Bebas Neue';font-size:3rem;margin-bottom:1rem;">YOUR SKILL REPORT</h1>
 
-    <!-- Score + Stats Grid -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;margin-bottom:2.5rem;" class="fade-in">
+  <p>Role: <span id="roleDisplay" style="color:#fff;"></span></p>
+  <p>Skills Entered: <span id="skillCount" style="color:#fff;"></span></p>
 
-      <!-- Score Block -->
-      <div style="border:1px solid #111;padding:2rem;text-align:center;">
-        <p class="section-label">Match Score</p>
-        <div class="score-num" id="matchScore">—</div>
-        <div class="score-label">% Industry Match</div>
-        <p id="scoreVerdict" style="font-size:0.75rem;color:#555;margin-top:1rem;line-height:1.6;"></p>
-      </div>
+  <hr style="border-top:1px solid #111;margin:2rem 0;">
 
-      <!-- Quick Stats -->
-      <div style="border:1px solid #111;padding:2rem;display:flex;flex-direction:column;gap:1.5rem;">
-        <div>
-          <p style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:#444;margin-bottom:0.25rem;">Missing Skills</p>
-          <p id="missingCount" style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--red);">—</p>
-        </div>
-        <div>
-          <p style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:#444;margin-bottom:0.25rem;">Recommended to Learn</p>
-          <p id="recCount" style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#fff;">—</p>
-        </div>
-        <div>
-          <p style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:#444;margin-bottom:0.25rem;">Gap Status</p>
-          <p id="gapStatus" style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;color:#fff;">—</p>
-        </div>
-      </div>
-    </div>
+  <h2 style="font-family:'Bebas Neue';font-size:4rem;color:var(--red);" id="matchScore">--%</h2>
+  <p id="scoreVerdict" style="color:#555;margin-bottom:2rem;"></p>
 
-    <hr class="divider">
+  <h3 class="section-title">Missing Skills</h3>
+  <div id="missingSkills"></div>
 
-    <!-- Missing Skills -->
-    <div class="fade-in" style="margin-bottom:2.5rem;">
-      <p class="section-label">Critical Gaps</p>
-      <h2 class="section-title">MISSING SKILLS <span class="count-badge" id="missingCountBadge"></span></h2>
-      <div id="missingSkills"></div>
-    </div>
+  <hr style="border-top:1px solid #111;margin:2rem 0;">
 
-    <hr class="divider">
+  <h3 class="section-title">Recommended Skills</h3>
+  <div id="recommendedSkills"></div>
 
-    <!-- Recommended Skills -->
-    <div class="fade-in" style="margin-bottom:2.5rem;">
-      <p class="section-label">Next Steps</p>
-      <h2 class="section-title">RECOMMENDED SKILLS <span class="count-badge" id="recCountBadge"></span></h2>
-      <div id="recommendedSkills"></div>
-    </div>
+</main>
 
-    <hr class="divider">
+<script>
+async function loadDashboard() {
 
-    <!-- Chart -->
-    <div class="fade-in">
-      <p class="section-label">Skill Breakdown</p>
-      <h2 class="section-title">PROFICIENCY OVERVIEW</h2>
-      <div class="chart-wrap">
-        <canvas id="skillChart" height="260"></canvas>
-      </div>
-    </div>
+  const skills = localStorage.getItem('sg_skills') || '';
+  const role   = localStorage.getItem('sg_role')   || 'Data Scientist';
 
-  </main>
+  const skillArr = skills.split(',').map(s => s.trim()).filter(Boolean);
 
-  <script src="script.js"></script>
-  <script>
-    // Read from localStorage
-    const skills = localStorage.getItem('sg_skills') || 'Python, React, Git';
-    const role   = localStorage.getItem('sg_role')   || 'Data Scientist';
+  document.getElementById('roleDisplay').textContent = role;
+  document.getElementById('skillCount').textContent = skillArr.length;
 
-    // Mock analysis result
-    const MOCK = getMockResult(role);
+  try {
 
-    // Display role & skill count
-    document.getElementById('roleDisplay').textContent = role;
-    const skillArr = skills.split(',').map(s => s.trim()).filter(Boolean);
-    document.getElementById('skillCount').textContent = skillArr.length;
+    const response = await fetch("http://localhost:3000/api/jobs/match", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        role: role,
+        userSkills: skillArr
+      })
+    });
 
-    // Score
-    document.getElementById('matchScore').textContent = MOCK.match + '%';
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message);
 
-    // Verdict
-    const v = MOCK.match >= 70 ? 'Strong foundation — a few gaps to close.'
-            : MOCK.match >= 50 ? 'Moderate fit — targeted learning needed.'
-            : 'Significant gaps — focused upskilling required.';
-    document.getElementById('scoreVerdict').textContent = v;
+    const match = data.matchPercentage;
+    const missing = data.missingSkills;
 
-    // Counts
-    document.getElementById('missingCount').textContent = MOCK.missing.length;
-    document.getElementById('recCount').textContent     = MOCK.recommended.length;
-    document.getElementById('missingCountBadge').textContent = `(${MOCK.missing.length})`;
-    document.getElementById('recCountBadge').textContent     = `(${MOCK.recommended.length})`;
+    document.getElementById('matchScore').textContent = match + "%";
 
-    const gapText = MOCK.match >= 70 ? 'MANAGEABLE' : MOCK.match >= 50 ? 'MODERATE' : 'SIGNIFICANT';
-    document.getElementById('gapStatus').textContent = gapText;
+    const verdict = match >= 70
+      ? "Strong foundation — a few gaps to close."
+      : match >= 50
+      ? "Moderate fit — targeted learning needed."
+      : "Significant gaps — focused upskilling required.";
 
-    // Skill pills
+    document.getElementById('scoreVerdict').textContent = verdict;
+
+    // Missing skills
     const missingWrap = document.getElementById('missingSkills');
-    MOCK.missing.forEach(s => {
-      const el = document.createElement('span');
-      el.className = 'pill pill-missing';
-      el.textContent = s;
+    missingWrap.innerHTML = "";
+    missing.forEach(skill => {
+      const el = document.createElement("span");
+      el.className = "pill pill-missing";
+      el.textContent = skill;
       missingWrap.appendChild(el);
     });
 
+    // Recommended = same as missing (for now)
     const recWrap = document.getElementById('recommendedSkills');
-    MOCK.recommended.forEach(s => {
-      const el = document.createElement('span');
-      el.className = 'pill pill-rec';
-      el.textContent = s;
+    recWrap.innerHTML = "";
+    missing.forEach(skill => {
+      const el = document.createElement("span");
+      el.className = "pill pill-rec";
+      el.textContent = skill;
       recWrap.appendChild(el);
     });
 
-    // Chart.js
-    const allSkills = [...MOCK.missing, ...MOCK.recommended, ...skillArr.slice(0,4)];
-    const labels    = [...new Set(allSkills)].slice(0, 10);
-    const data      = labels.map(l => skillArr.some(s => s.toLowerCase() === l.toLowerCase()) ? 80 + Math.floor(Math.random()*15) : 20 + Math.floor(Math.random()*35));
+  } catch (error) {
+    console.error(error);
+    alert("Backend connection failed");
+  }
+}
 
-    new Chart(document.getElementById('skillChart'), {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Skill Coverage %',
-          data,
-          backgroundColor: labels.map(l =>
-            skillArr.some(s => s.toLowerCase() === l.toLowerCase()) ? '#FF0000' : '#1a0000'
-          ),
-          borderColor: '#FF0000',
-          borderWidth: 1,
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#111',
-            borderColor: '#FF0000',
-            borderWidth: 1,
-            titleColor: '#fff',
-            bodyColor: '#888',
-            titleFont: { family: 'IBM Plex Mono', size: 11 },
-            bodyFont:  { family: 'IBM Plex Mono', size: 11 },
-          }
-        },
-        scales: {
-          x: {
-            ticks: { color: '#444', font: { family: 'IBM Plex Mono', size: 10 } },
-            grid:  { color: '#0d0d0d' },
-            border: { color: '#111' }
-          },
-          y: {
-            min: 0, max: 100,
-            ticks: { color: '#444', font: { family: 'IBM Plex Mono', size: 10 }, callback: v => v + '%' },
-            grid:  { color: '#0d0d0d' },
-            border: { color: '#111' }
-          }
-        }
-      }
-    });
-  </script>
+loadDashboard();
+</script>
+
 </body>
 </html>
