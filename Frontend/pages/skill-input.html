@@ -9,9 +9,9 @@
   <style>
     :root { --red: #FF0000; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:#fff; font-family:'IBM Plex Mono',monospace; min-height:100vh; }
+    body { background: linear-gradient(to right, #141e30, #243b55); color:#fff; font-family:'IBM Plex Mono',monospace; min-height:100vh; }
 
-    .field-label { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:#555; margin-bottom:0.5rem; display:block; }
+    .field-label { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color:#ffffff; margin-bottom:0.5rem; display:block; }
 
     textarea, select {
       width:100%; background:#000; color:#fff;
@@ -25,13 +25,13 @@
     select option { background:#000; }
 
     .submit-btn {
-      width:100%; background:var(--red); color:#fff;
+      width:100%; background:#030303; color:#fff;
       font-family:'IBM Plex Mono',monospace; font-size:0.8rem;
       letter-spacing:0.25em; text-transform:uppercase;
       border:none; cursor:pointer; padding:1.1rem;
       position:relative; transition:background 0.15s, box-shadow 0.2s;
     }
-    .submit-btn:hover { background:#cc0000; box-shadow:0 0 20px rgba(255,0,0,0.3); }
+    .submit-btn:hover {background: linear-gradient(to right, #dd2476, #ff512f);; box-shadow:0 0 20px rgba(255,0,0,0.3); }
     .submit-btn:active { transform:translateY(1px); }
 
     .divider { border:none; border-top:1px solid #111; margin:2rem 0; }
@@ -43,7 +43,7 @@
     .progress-bar { height:1px; background:#111; width:100%; }
     .progress-fill { height:1px; background:var(--red); width:50%; }
 
-    .tag-hint { font-size:0.65rem; color:#333; letter-spacing:0.1em; margin-top:0.5rem; }
+    .tag-hint { font-size:0.65rem; color:#ffffff; letter-spacing:0.1em; margin-top:0.5rem; }
   </style>
 </head>
 <body>
@@ -65,7 +65,7 @@
         <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,7vw,4.5rem);line-height:0.95;margin-bottom:1rem;">
           WHAT CAN<br>YOU <span style="color:var(--red)">DO?</span>
         </h1>
-        <p style="font-size:0.78rem;color:#444;line-height:1.8;">Tell us your current skills and target role.<br>We'll show you the gap instantly.</p>
+        <p style="font-size:0.78rem;color:#ffffff;line-height:1.8;">Tell us your current skills and target role.<br>We'll show you the gap instantly.</p>
       </div>
 
       <form class="fade-in-2" id="skillForm" style="display:flex;flex-direction:column;gap:1.75rem;">
