@@ -51,7 +51,7 @@
     }
     .nav-links a:hover { color: #fff; }
     .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-    .nav-links a.active { color: rgba(255,255,255,0.8); }
+    .nav-links a.active { color: rgba(255,255,255); }
     .nav-cta {
       font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
       background: var#000; color: #000; text-decoration: none;
@@ -94,12 +94,7 @@
       padding: 64px 2rem 0; max-width: 1200px; margin: 0 auto;
     }
 
-    /* Ticker */
-    .ticker-wrap { overflow: hidden; border-top: 1px solid rgba(255,0,0,0.15); border-bottom: 1px solid rgba(255,0,0,0.15); }
-    .ticker-track { display: flex; gap: 64px; white-space: nowrap; animation: tickerRoll 28s linear infinite; padding: 10px 0; }
-    .ticker-item { font-size: 10px; letter-spacing: 0.2em; color: rgba(255,0,0,0.5); text-transform: uppercase; flex-shrink: 0; }
-    @keyframes tickerRoll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
+   
     /* Hero heading */
     .hero-heading {
       font-family: 'Bebas Neue', sans-serif;
@@ -448,11 +443,7 @@
 </style>
 
 <script>
-// ── TICKER ──
-const skills = ['Docker','Machine Learning','SQL','Python','React','Kubernetes','Data Science','TypeScript','FastAPI','Spark','TensorFlow','AWS','Redis','GraphQL','Rust','Node.js','Git','CI/CD'];
-const ticker = document.getElementById('ticker');
-const all = [...skills,...skills,...skills,...skills];
-ticker.innerHTML = all.map(s => `<span class="ticker-item">— ${s}</span>`).join('');
+
 
 // ── INDUSTRY TAGS ──
 const industries = ['FAANG','FinTech','HealthTech','SaaS','AI/ML Startups','E-commerce','Gaming','Cybersecurity'];

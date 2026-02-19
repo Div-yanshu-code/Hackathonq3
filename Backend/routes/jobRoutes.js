@@ -1,16 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-  createJob,
-  getJobs,
-  matchSkills,
-} = require("../controllers/jobControllers");
+router.post("/match", (req, res) => {
+  const { role, userSkills } = req.body;
 
-router.post("/", createJob);
-router.get("/", getJobs);
+  // dummy logic
+  const requiredSkills = ["Python", "SQL", "Machine Learning"];
 
-// 🔥 NEW ROUTE
-router.post("/match", matchSkills);
+  const missingSkills = requiredSkills.filter(
+    (skill) => !userSkills.includes(skill),
+  );
+
+  const matchPercentage =
+    ((requiredSkills.length - missingSkills.length) / requiredSkills.length) *
+    100;
+
+  res.json({
+    matchPercentage: Math.round(matchPercentage),
+    missingSkills,
+  });
+});
 
 module.exports = router;
