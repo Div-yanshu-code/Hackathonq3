@@ -10,7 +10,7 @@
     :root { --red: #FF0000; --red-dim: rgba(255,0,0,0.15); }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: #000; color: #fff; font-family: 'DM Mono', monospace; overflow-x: hidden; }
+    body {background: linear-gradient(to right, #141e30, #243b55); color: #fff; font-family: 'DM Mono', monospace; overflow-x: hidden; }
     .display { font-family: 'Bebas Neue', sans-serif; }
 
     /* ── GRID BACKGROUND ── */
@@ -197,7 +197,7 @@
     /* ── FOOTER ── */
     footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 48px 2rem 32px; position: relative; z-index: 1; }
     .footer-inner { max-width: 1200px; margin: 0 auto; }
-    .footer-links a { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.15s; }
+    .footer-links a { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255); text-decoration: none; transition: color 0.15s; }
     .footer-links a:hover { color: var(--red); }
 
     /* ── SCROLL ANIMATIONS ── */
@@ -270,7 +270,7 @@
     </h1>
 
     <!-- Sub -->
-    <p class="hero-a3" style="font-size:13px;line-height:2.1;color:rgba(255,255,255,0.45);max-width:40ch;margin-bottom:2.5rem;">
+    <p class="hero-a3" style="font-size:13px;line-height:2.1;color:rgba(255,255,255);max-width:40ch;margin-bottom:2.5rem;">
       AI-powered analysis that maps your current skills against what the industry actually needs. No fluff. Just gaps and paths to close them.
     </p>
 
@@ -319,7 +319,7 @@
   <div style="display:flex;align-items:baseline;gap:1rem;margin-bottom:3rem;">
     <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;">HOW IT WORKS</h2>
   </div>
-  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:48ch;margin-bottom:4rem;">
+  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255);max-width:48ch;margin-bottom:4rem;">
     Three steps. No sign-up required. Go from uncertainty to clarity in under two minutes.
   </p>
 
@@ -353,7 +353,7 @@
 <section id="roles">
   <div class="section-eyebrow reveal" style="margin-top:0;padding-top:120px;">Supported Paths</div>
   <h2 class="display reveal" style="font-size:clamp(48px,7vw,88px);line-height:0.95;margin-bottom:1.5rem;">CAREER ROLES</h2>
-  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255,0.4);max-width:52ch;margin-bottom:4rem;">
+  <p class="reveal" style="font-size:12px;line-height:2;color:rgba(255,255,255);max-width:52ch;margin-bottom:4rem;">
     We've reverse-engineered what top companies actually look for. Pick your role and see where you stand.
   </p>
 
@@ -410,14 +410,14 @@
         <div class="display" style="font-size:1.8rem;letter-spacing:0.1em;margin-bottom:10px;">
           SKILL<span style="color:var(--red)">BRIDGE</span>
         </div>
-        <p style="font-size:11px;color:rgba(255,255,255,0.25);max-width:32ch;line-height:1.9;letter-spacing:0.05em;">
+        <p style="font-size:11px;color:rgba(255,255,255);max-width:32ch;line-height:1.9;letter-spacing:0.05em;">
           AI-powered skill gap analysis for developers and data professionals.
         </p>
       </div>
 
       <div style="display:flex;gap:4rem;flex-wrap:wrap;">
         <div>
-          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;">Navigate</div>
+          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255);margin-bottom:16px;">Navigate</div>
           <div class="footer-links" style="display:flex;flex-direction:column;gap:10px;">
             <a href="#hero">Home</a>
             <a href="#how">How It Works</a>
@@ -425,7 +425,7 @@
           </div>
         </div>
         <div>
-          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:16px;">Analyze</div>
+          <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255);margin-bottom:16px;">Analyze</div>
           <div class="footer-links" style="display:flex;flex-direction:column;gap:10px;">
             <a href="skill-input.html">Start Analysis</a>
             <a href="dashboard.html">View Dashboard</a>
@@ -434,13 +434,11 @@
       </div>
     </div>
 
-    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
-      <p style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.12em;">
-        &copy; 2025 SkillBridge. All rights reserved.
+    <div style="border-top:1px solid rgba(255,255,255);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;">
+      <p style="font-size:10px;color:rgba(255,255,255);letter-spacing:0.12em;">
+        &copy; 2026 SkillBridge. All rights reserved.
       </p>
-      <p style="font-size:10px;color:rgba(255,255,255,0.15);letter-spacing:0.1em;text-transform:uppercase;">
-        Built for developers · No backend · Local only
-      </p>
+     
     </div>
   </div>
 </footer>
