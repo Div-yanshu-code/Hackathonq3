@@ -1,123 +1,194 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SkillBridge — Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root { --red: #FF0000; }
-    body { background:#000; color:#fff; font-family:'IBM Plex Mono',monospace; }
-    .section-label { font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:0.75rem; }
-    .section-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; margin-bottom:1.5rem; }
-    .pill { display:inline-block; border:1px solid; padding:0.35rem 0.85rem; font-size:0.75rem; margin:0.25rem; }
-    .pill-missing { border-color:var(--red); color:var(--red); }
-    .pill-rec { border-color:#444; color:#888; }
-  </style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillBridge — Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --red: #ff0000;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: "IBM Plex Mono", monospace;
+      }
+      .section-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 0.75rem;
+      }
+      .section-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .pill {
+        display: inline-block;
+        border: 1px solid;
+        padding: 0.35rem 0.85rem;
+        font-size: 0.75rem;
+        margin: 0.25rem;
+      }
+      .pill-missing {
+        border-color: var(--red);
+        color: var(--red);
+      }
+      .pill-rec {
+        border-color: #444;
+        color: #888;
+      }
+    </style>
+  </head>
 
-<body>
+  <body>
+    <nav
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 2rem;
+        border-bottom: 1px solid #111;
+      "
+    >
+      <a
+        href="index.html"
+        style="
+          font-family: &quot;Bebas Neue&quot;;
+          font-size: 1.5rem;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          color: #fff;
+        "
+      >
+        SKILL<span style="color: var(--red)">BRIDGE</span>
+      </a>
+      <a
+        href="skill-input.html"
+        style="
+          border: 1px solid var(--red);
+          color: var(--red);
+          padding: 0.6rem 1.5rem;
+          text-decoration: none;
+        "
+        >Re-analyze</a
+      >
+    </nav>
 
-<nav style="display:flex;justify-content:space-between;align-items:center;padding:1.25rem 2rem;border-bottom:1px solid #111;">
-  <a href="index.html" style="font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:0.1em;text-decoration:none;color:#fff;">
-    SKILL<span style="color:var(--red)">BRIDGE</span>
-  </a>
-  <a href="skill-input.html" style="border:1px solid var(--red);color:var(--red);padding:0.6rem 1.5rem;text-decoration:none;">Re-analyze</a>
-</nav>
+    <main style="max-width: 1100px; margin: 0 auto; padding: 3rem 1.5rem 6rem">
+      <p class="section-label">▸ Analysis Complete</p>
+      <h1
+        style="
+          font-family: &quot;Bebas Neue&quot;;
+          font-size: 3rem;
+          margin-bottom: 1rem;
+        "
+      >
+        YOUR SKILL REPORT
+      </h1>
 
-<main style="max-width:1100px;margin:0 auto;padding:3rem 1.5rem 6rem;">
+      <p>Role: <span id="roleDisplay" style="color: #fff"></span></p>
+      <p>Skills Entered: <span id="skillCount" style="color: #fff"></span></p>
 
-  <p class="section-label">▸ Analysis Complete</p>
-  <h1 style="font-family:'Bebas Neue';font-size:3rem;margin-bottom:1rem;">YOUR SKILL REPORT</h1>
+      <hr style="border-top: 1px solid #111; margin: 2rem 0" />
 
-  <p>Role: <span id="roleDisplay" style="color:#fff;"></span></p>
-  <p>Skills Entered: <span id="skillCount" style="color:#fff;"></span></p>
+      <h2
+        style="
+          font-family: &quot;Bebas Neue&quot;;
+          font-size: 4rem;
+          color: var(--red);
+        "
+        id="matchScore"
+      >
+        --%
+      </h2>
+      <p id="scoreVerdict" style="color: #555; margin-bottom: 2rem"></p>
 
-  <hr style="border-top:1px solid #111;margin:2rem 0;">
+      <h3 class="section-title">Missing Skills</h3>
+      <div id="missingSkills"></div>
 
-  <h2 style="font-family:'Bebas Neue';font-size:4rem;color:var(--red);" id="matchScore">--%</h2>
-  <p id="scoreVerdict" style="color:#555;margin-bottom:2rem;"></p>
+      <hr style="border-top: 1px solid #111; margin: 2rem 0" />
 
-  <h3 class="section-title">Missing Skills</h3>
-  <div id="missingSkills"></div>
+      <h3 class="section-title">Recommended Skills</h3>
+      <div id="recommendedSkills"></div>
+    </main>
 
-  <hr style="border-top:1px solid #111;margin:2rem 0;">
+    <script>
+      async function loadDashboard() {
+        const skills = localStorage.getItem("sg_skills") || "";
+        const role = localStorage.getItem("sg_role") || "Data Scientist";
 
-  <h3 class="section-title">Recommended Skills</h3>
-  <div id="recommendedSkills"></div>
+        const skillArr = skills
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
 
-</main>
+        document.getElementById("roleDisplay").textContent = role;
+        document.getElementById("skillCount").textContent = skillArr.length;
 
-<script>
-async function loadDashboard() {
+        try {
+          const response = await fetch("http://localhost:3000/api/jobs/match", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              role: role,
+              userSkills: skillArr,
+            }),
+          });
 
-  const skills = localStorage.getItem('sg_skills') || '';
-  const role   = localStorage.getItem('sg_role')   || 'Data Scientist';
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.message);
 
-  const skillArr = skills.split(',').map(s => s.trim()).filter(Boolean);
+          const match = data.matchPercentage;
+          const missing = data.missingSkills;
 
-  document.getElementById('roleDisplay').textContent = role;
-  document.getElementById('skillCount').textContent = skillArr.length;
+          document.getElementById("matchScore").textContent = match + "%";
 
-  try {
+          const verdict =
+            match >= 70
+              ? "Strong foundation — a few gaps to close."
+              : match >= 50
+                ? "Moderate fit — targeted learning needed."
+                : "Significant gaps — focused upskilling required.";
 
-    const response = await fetch("http://localhost:3000/api/jobs/match", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        role: role,
-        userSkills: skillArr
-      })
-    });
+          document.getElementById("scoreVerdict").textContent = verdict;
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message);
+          // Missing skills
+          const missingWrap = document.getElementById("missingSkills");
+          missingWrap.innerHTML = "";
+          missing.forEach((skill) => {
+            const el = document.createElement("span");
+            el.className = "pill pill-missing";
+            el.textContent = skill;
+            missingWrap.appendChild(el);
+          });
 
-    const match = data.matchPercentage;
-    const missing = data.missingSkills;
+          // Recommended = same as missing (for now)
+          const recWrap = document.getElementById("recommendedSkills");
+          recWrap.innerHTML = "";
+          missing.forEach((skill) => {
+            const el = document.createElement("span");
+            el.className = "pill pill-rec";
+            el.textContent = skill;
+            recWrap.appendChild(el);
+          });
+        } catch (error) {
+          console.error(error);
+          alert("Backend connection failed");
+        }
+      }
 
-    document.getElementById('matchScore').textContent = match + "%";
-
-    const verdict = match >= 70
-      ? "Strong foundation — a few gaps to close."
-      : match >= 50
-      ? "Moderate fit — targeted learning needed."
-      : "Significant gaps — focused upskilling required.";
-
-    document.getElementById('scoreVerdict').textContent = verdict;
-
-    // Missing skills
-    const missingWrap = document.getElementById('missingSkills');
-    missingWrap.innerHTML = "";
-    missing.forEach(skill => {
-      const el = document.createElement("span");
-      el.className = "pill pill-missing";
-      el.textContent = skill;
-      missingWrap.appendChild(el);
-    });
-
-    // Recommended = same as missing (for now)
-    const recWrap = document.getElementById('recommendedSkills');
-    recWrap.innerHTML = "";
-    missing.forEach(skill => {
-      const el = document.createElement("span");
-      el.className = "pill pill-rec";
-      el.textContent = skill;
-      recWrap.appendChild(el);
-    });
-
-  } catch (error) {
-    console.error(error);
-    alert("Backend connection failed");
-  }
-}
-
-loadDashboard();
-</script>
-
-</body>
+      loadDashboard();
+    </script>
+  </body>
 </html>
